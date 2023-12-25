@@ -1,0 +1,43 @@
+#criando network:
+
+docker network create cesar-ms-network
+
+#Criando container
+
+docker build -t cesar/vacina-server .
+
+#Emulando server:
+
+docker run --name eureka-server --network cesar-ms-network -p 8761:8761 cesar/eureka
+
+docker run --network cesar-ms-network cesar/vacina-server
+
+#criando banco de dados (imagem do PostgreSQL):
+
+docker run -d --name postgresql -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=654321 --network cesar-ms-network -p 5432:5432 --volume VOL1 bitnami/postgresql:latest
+
+
+#Baixar a imagem do phpPgAdmin e criar um container no docker:
+
+docker run -d --name phppgadmin --network REDE1 -p 8080:80 -p 443:8443 bitnami/phppgadmin:latest
+
+
+reference:
+https://www.homehost.com.br/blog/tutoriais/como-instalar-o-postgresql-e-phppgadmin-no-docker/
+
+#criando zipkin
+
+docker run --name zipkin --network cesar-ms-network -d -p 9411:9411 openzipkin/zipkin
+
+
+#criando jaeger
+docker pull jaegertracing/all-in-one
+
+ports:
+      - "16686:16686" # Jaeger UI
+      - "14268:14268" # Receive legacy OpenTracing traces, optional
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver, not yet used by Quarkus, optional
+      - "14250:14250" # Receive from external otel-collector, optional
+
+docker run -d --name jaeger --network cesar-ms-network -p 16686:16686 -p 14268:14268 -p 4317:4317  -p 4318:4318 -p 14250:14250  jaegertracing/all-in-one

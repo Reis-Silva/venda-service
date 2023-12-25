@@ -16,4 +16,8 @@ public class VacinaAPIServiceImpl {
     public List<Vacina> getAllVacina(List<Long> ids) {
         return ids.stream().map(id -> vacinaAPIService.getById(id)).toList();
     }
+
+    public Vacina comprar(Vacina vacina) {
+        return vacinaAPIService.Comprar(vacina);
+    }
 }

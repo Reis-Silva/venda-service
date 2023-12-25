@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "venda-service", url = "http://localhost:8280")
+@FeignClient(name = "vacina-service", url = "http://localhost:9090/api/gateway")
 public interface VacinaAPIService {
 
     @RequestMapping(method = RequestMethod.GET, value = "/vacina/{id}")
     Vacina getById(@PathVariable Long id);
 
+    @RequestMapping(method = RequestMethod.POST, value = "/vacina")
+    Vacina Comprar(Vacina vacina);
 }
